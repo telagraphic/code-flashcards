@@ -207,7 +207,7 @@ function createTodoList(containerId) {
   let todos = [];  // Private state
   let nextId = 1;
   
-  // Single click handler on container (event delegation)
+  // Single click handler on container (event delegation), creates a closure around todos
   const handleClick = function(event) {
     const target = event.target;
     
@@ -226,7 +226,8 @@ function createTodoList(containerId) {
       }
     }
   };
-  
+ 
+  // Creates a closure around todos
   const render = function() {
     container.innerHTML = todos.map(todo => `
       <div class="todo ${todo.done ? 'done' : ''}">

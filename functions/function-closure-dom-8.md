@@ -171,7 +171,7 @@ function createLazyLoader(options = {}) {
       img.onload = () => {
         img.classList.add('loaded');
         loadedImages.add(img);
-        if (onLoad) onLoad(img);
+        if (onLoad) onLoad(img);// where is onLoad referenced? from the option
       };
       img.onerror = () => {
         img.classList.add('error');
@@ -223,7 +223,7 @@ function createLazyLoader(options = {}) {
 // Usage
 const lazyLoader = createLazyLoader({
   rootMargin: '200px',
-  onLoad: (img) => console.log('Loaded:', img.src)
+  onLoad: (img) => console.log('Loaded:', img.src) // onLoad can be a callback?
 });
 
 // Observe all images with data-src attribute
