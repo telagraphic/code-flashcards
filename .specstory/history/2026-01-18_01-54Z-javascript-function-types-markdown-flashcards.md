@@ -74,7 +74,6 @@ Here’s your table of **JavaScript function types and patterns**, **sorted and 
 
 _**Agent (model composer-1, mode Plan)**_
 
-
 Exploring the workspace to understand the structure, then drafting a plan for the JavaScript function flashcards.
 
 
@@ -92,41 +91,26 @@ Parameters:
   "targetDirectory": "/Users/nickname/Documents/code-design/flashcards"
 }
 ```
-Result:
+Additional data:
 
 ```json
 {
-  "directoryTreeRoot": {
-    "absPath": "/Users/nickname/Documents/code-design/flashcards",
-    "childrenDirs": [
-      {
-        "absPath": "/Users/nickname/Documents/code-design/flashcards/.specstory",
-        "childrenDirs": [
-          {
-            "absPath": "/Users/nickname/Documents/code-design/flashcards/.specstory/history",
-            "childrenFiles": [
-              {
-                "name": "2026-01-18_01-54Z-javascript-function-type-flashcards.md"
-              }
-            ],
-            "childrenWereProcessed": true
-          }
-        ],
-        "childrenFiles": [
-          {
-            "name": ".gitignore"
-          }
-        ],
-        "childrenWereProcessed": true
-      }
-    ],
-    "childrenFiles": [
-      {
-        "name": ".cursorindexingignore"
-      }
-    ],
-    "childrenWereProcessed": true
-  }
+  "isPruned": true,
+  "rootPath": "/Users/nickname/Documents/code-design/flashcards",
+  "totalDirs": 2,
+  "totalFiles": 3,
+  "topEntries": [
+    {
+      "path": "/Users/nickname/Documents/code-design/flashcards/.specstory",
+      "isDir": true,
+      "numFiles": 0
+    },
+    {
+      "path": "/Users/nickname/Documents/code-design/flashcards/.cursorindexingignore",
+      "isDir": false
+    }
+  ],
+  "extensionCounts": {}
 }
 ```
 Status: **completed**
@@ -152,8 +136,6 @@ Directory: **undefined** (2 files)
 </tool-use>
 
 ---
-
-
 
 
 
@@ -188,7 +170,6 @@ Status: **completed**
 </tool-use>
 
 ---
-
 
 Clarifying a few details before creating the plan:
 
@@ -304,7 +285,6 @@ Status: **completed**
 
 ---
 
-
 Creating the plan:
 
 
@@ -389,7 +369,6 @@ To-do's from the plan have already been created. Do not create them again. Mark 
 
 _**Agent (model composer-1, mode Agent)**_
 
-
 Creating the directory, then generating flashcards for all function types.
 
 
@@ -419,7 +398,6 @@ mkdir -p /Users/nickname/Documents/code-design/flashcards/javascript-functions
 </tool-use>
 
 ---
-
 
 Creating flashcards, starting with the Async/Event-Driven category:
 
@@ -589,7 +567,6 @@ Creating flashcards, starting with the Async/Event-Driven category:
 </tool-use>
 
 ---
-
 
 Continuing with the Encapsulation/Reusability category:
 
@@ -790,7 +767,6 @@ Continuing with the Encapsulation/Reusability category:
 
 ---
 
-
 Continuing with the Transformation/Composition category:
 
 
@@ -900,7 +876,6 @@ Continuing with the Transformation/Composition category:
 
 ---
 
-
 Finishing with the Performance Optimization category:
 
 
@@ -994,7 +969,6 @@ Finishing with the Performance Optimization category:
 
 ---
 
-
 Verifying all flashcards were created:
 
 
@@ -1051,7 +1025,6 @@ function-class-method-2.md
 
 ---
 
-
 Created 48 flashcards for all 16 JavaScript function types.
 
 ## Summary
@@ -1102,7 +1075,6 @@ In a similar approach, create a set of flashcards for explaining the basics of j
 
 _**Agent (model composer-1, mode Agent)**_
 
-
 Checking the directory structure, then creating callback flashcards covering basics, browser APIs, and modern web patterns.
 
 
@@ -1120,191 +1092,31 @@ Parameters:
   "targetDirectory": "/Users/nickname/Documents/code-design/flashcards"
 }
 ```
-Result:
+Additional data:
 
 ```json
 {
-  "directoryTreeRoot": {
-    "absPath": "/Users/nickname/Documents/code-design/flashcards",
-    "childrenDirs": [
-      {
-        "absPath": "/Users/nickname/Documents/code-design/flashcards/.specstory",
-        "childrenDirs": [
-          {
-            "absPath": "/Users/nickname/Documents/code-design/flashcards/.specstory/history",
-            "childrenFiles": [
-              {
-                "name": "2026-01-18_01-54Z-javascript-function-types-markdown-flashcards.md"
-              }
-            ],
-            "childrenWereProcessed": true
-          }
-        ],
-        "childrenFiles": [
-          {
-            "name": ".gitignore"
-          }
-        ],
-        "childrenWereProcessed": true
-      },
-      {
-        "absPath": "/Users/nickname/Documents/code-design/flashcards/functions",
-        "childrenFiles": [
-          {
-            "name": "function-anonymous-function-1.md"
-          },
-          {
-            "name": "function-anonymous-function-2.md"
-          },
-          {
-            "name": "function-anonymous-function-3.md"
-          },
-          {
-            "name": "function-arrow-function-1.md"
-          },
-          {
-            "name": "function-arrow-function-2.md"
-          },
-          {
-            "name": "function-arrow-function-3.md"
-          },
-          {
-            "name": "function-async-arrow-function-1.md"
-          },
-          {
-            "name": "function-async-arrow-function-2.md"
-          },
-          {
-            "name": "function-async-arrow-function-3.md"
-          },
-          {
-            "name": "function-async-function-1.md"
-          },
-          {
-            "name": "function-async-function-2.md"
-          },
-          {
-            "name": "function-async-function-3.md"
-          },
-          {
-            "name": "function-bound-function-1.md"
-          },
-          {
-            "name": "function-bound-function-2.md"
-          },
-          {
-            "name": "function-bound-function-3.md"
-          },
-          {
-            "name": "function-callback-function-1.md"
-          },
-          {
-            "name": "function-callback-function-2.md"
-          },
-          {
-            "name": "function-callback-function-3.md"
-          },
-          {
-            "name": "function-class-method-1.md"
-          },
-          {
-            "name": "function-class-method-2.md"
-          },
-          {
-            "name": "function-class-method-3.md"
-          },
-          {
-            "name": "function-constructor-function-1.md"
-          },
-          {
-            "name": "function-constructor-function-2.md"
-          },
-          {
-            "name": "function-constructor-function-3.md"
-          },
-          {
-            "name": "function-curried-function-1.md"
-          },
-          {
-            "name": "function-curried-function-2.md"
-          },
-          {
-            "name": "function-curried-function-3.md"
-          },
-          {
-            "name": "function-debounced-function-1.md"
-          },
-          {
-            "name": "function-debounced-function-2.md"
-          },
-          {
-            "name": "function-debounced-function-3.md"
-          },
-          {
-            "name": "function-function-declaration-1.md"
-          },
-          {
-            "name": "function-function-declaration-2.md"
-          },
-          {
-            "name": "function-function-declaration-3.md"
-          },
-          {
-            "name": "function-function-expression-1.md"
-          },
-          {
-            "name": "function-function-expression-2.md"
-          },
-          {
-            "name": "function-function-expression-3.md"
-          },
-          {
-            "name": "function-higher-order-function-1.md"
-          },
-          {
-            "name": "function-higher-order-function-2.md"
-          },
-          {
-            "name": "function-higher-order-function-3.md"
-          },
-          {
-            "name": "function-iife-1.md"
-          },
-          {
-            "name": "function-iife-2.md"
-          },
-          {
-            "name": "function-iife-3.md"
-          },
-          {
-            "name": "function-method-object-1.md"
-          },
-          {
-            "name": "function-method-object-2.md"
-          },
-          {
-            "name": "function-method-object-3.md"
-          },
-          {
-            "name": "function-throttled-function-1.md"
-          },
-          {
-            "name": "function-throttled-function-2.md"
-          },
-          {
-            "name": "function-throttled-function-3.md"
-          }
-        ],
-        "childrenWereProcessed": true
-      }
-    ],
-    "childrenFiles": [
-      {
-        "name": ".cursorindexingignore"
-      }
-    ],
-    "childrenWereProcessed": true
-  }
+  "isPruned": true,
+  "rootPath": "/Users/nickname/Documents/code-design/flashcards",
+  "totalDirs": 3,
+  "totalFiles": 51,
+  "topEntries": [
+    {
+      "path": "/Users/nickname/Documents/code-design/flashcards/.specstory",
+      "isDir": true,
+      "numFiles": 0
+    },
+    {
+      "path": "/Users/nickname/Documents/code-design/flashcards/functions",
+      "isDir": true,
+      "numFiles": 0
+    },
+    {
+      "path": "/Users/nickname/Documents/code-design/flashcards/.cursorindexingignore",
+      "isDir": false
+    }
+  ],
+  "extensionCounts": {}
 }
 ```
 Status: **completed**
@@ -1322,7 +1134,6 @@ Status: **completed**
 </tool-use>
 
 ---
-
 
 Creating callback flashcards in the `functions` directory, covering basics, browser APIs, and modern web patterns.
 
@@ -1509,7 +1320,6 @@ Creating callback flashcards in the `functions` directory, covering basics, brow
 
 ---
 
-
 Verifying all callback flashcards were created:
 
 
@@ -1563,7 +1373,6 @@ ls -1 /Users/nickname/Documents/code-design/flashcards/functions/callback-*.md
 </tool-use>
 
 ---
-
 
 Created 18 callback flashcards covering:
 
@@ -1684,7 +1493,6 @@ Put these in "promises" directory
 ---
 
 _**Agent (model composer-1, mode Agent)**_
-
 
 Creating promise flashcards covering basics, states, and modern web app patterns. Organizing them in a `promises` directory.
 
@@ -2042,7 +1850,6 @@ mkdir -p /Users/nickname/Documents/code-design/flashcards/promises
 
 ---
 
-
 Verifying all flashcards were created:
 
 
@@ -2112,7 +1919,6 @@ promise-try-catch-2.md
 </tool-use>
 
 ---
-
 
 Created 34 promise flashcards in the `promises` directory. Summary:
 
@@ -2207,7 +2013,6 @@ Do the same but for the Map object table below:
 ---
 
 _**Agent (model composer-1, mode Agent)**_
-
 
 Creating Map flashcards covering basics, methods, and modern web app patterns. Organizing them in a `maps` directory.
 
@@ -2525,7 +2330,6 @@ mkdir -p /Users/nickname/Documents/code-design/flashcards/maps
 
 ---
 
-
 Verifying all Map flashcards were created:
 
 
@@ -2592,7 +2396,6 @@ map-values-2.md
 
 ---
 
-
 Created 30 Map flashcards in the `maps` directory. Summary:
 
 ## Summary
@@ -2656,7 +2459,6 @@ Provide some modern examples of using Maps in creative ways for a frontend web a
 
 _**Agent (model composer-1, mode Agent)**_
 
-
 Creating 5 flashcards showcasing creative Map use cases in modern frontend web apps.
 
 
@@ -2712,7 +2514,6 @@ Creating 5 flashcards showcasing creative Map use cases in modern frontend web a
 
 ---
 
-
 Created 5 flashcards showcasing creative Map use cases in modern frontend web apps. Summary:
 
 ## Creative Map Use Cases
@@ -2761,7 +2562,6 @@ Put these in a folder called "syntax-basics"
 ---
 
 _**Agent (model composer-1, mode Agent)**_
-
 
 Creating flashcards covering JavaScript syntax concepts: destructuring, nullish coalescing, rest/spread, optional chaining, block scope, default values, and closures. Organizing them in a `syntax-basics` directory.
 
@@ -3089,7 +2889,6 @@ mkdir -p /Users/nickname/Documents/code-design/flashcards/syntax-basics
 
 ---
 
-
 Verifying all flashcards were created:
 
 
@@ -3156,7 +2955,6 @@ spread-object-2.md
 </tool-use>
 
 ---
-
 
 Created 31 flashcards covering JavaScript syntax concepts in the `syntax-basics` directory. Summary:
 
@@ -3233,7 +3031,6 @@ Create a set flashcards that covers the use case for call, apply, bind. Provide 
 ---
 
 _**Agent (model composer-1, mode Agent)**_
-
 
 Creating flashcards covering `call`, `apply`, and `bind` with explanations and modern web app examples.
 
@@ -3350,7 +3147,6 @@ Creating flashcards covering `call`, `apply`, and `bind` with explanations and m
 
 ---
 
-
 Verifying all flashcards were created:
 
 
@@ -3397,7 +3193,6 @@ ls -1 /Users/nickname/Documents/code-design/flashcards/syntax-basics/{call,apply
 </tool-use>
 
 ---
-
 
 Created 11 flashcards covering `call`, `apply`, and `bind` with explanations and modern web app examples. Summary:
 
@@ -3484,7 +3279,6 @@ Create these cards in a directory called "browser-dom"
 ---
 
 _**Agent (model composer-1, mode Agent)**_
-
 
 Creating flashcards covering browser concepts: critical rendering path, event loop, requestAnimationFrame, DOM ready states, dimensions, and element querying methods.
 
@@ -3741,7 +3535,6 @@ mkdir -p /Users/nickname/Documents/code-design/flashcards/browser-dom
 </tool-use>
 
 ---
-
 
 Verifying all flashcards were created:
 
@@ -4460,7 +4253,6 @@ Create a set of flashcards for javascript data types. Provide some modern web ap
 
 _**Agent (model composer-1, mode Agent)**_
 
-
 Creating flashcards for JavaScript data types with modern web app use cases, an undefined vs null comparison, and a summary table.
 
 
@@ -4607,7 +4399,6 @@ mkdir -p /Users/nickname/Documents/code-design/flashcards/types
 
 ---
 
-
 Verifying all flashcards were created:
 
 
@@ -4656,7 +4447,6 @@ undefined-vs-null.md
 </tool-use>
 
 ---
-
 
 Created 13 flashcards covering JavaScript data types. Summary:
 
@@ -4728,7 +4518,6 @@ Place in a loops directory
 ---
 
 _**Agent (model composer-1, mode Agent)**_
-
 
 Creating flashcards for JavaScript loop types with modern web app use cases.
 
@@ -4986,7 +4775,6 @@ mkdir -p /Users/nickname/Documents/code-design/flashcards/loops
 
 ---
 
-
 Verifying all loop flashcards were created:
 
 
@@ -4998,16 +4786,17 @@ Verifying all loop flashcards were created:
 ```bash
 ls -1 /Users/nickname/Documents/code-design/flashcards/loops/ | wc -l
 ```
+
+```
+      24
+
+```
 </details>
 </tool-use>
 
 ---
 
-<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2">
-<details><summary>Tool use: **run_terminal_command_v2**</summary>
-
-</details>
-</tool-use>
+Cancelled
 
 ---
 
@@ -5030,13 +4819,17 @@ Place them in the objects directory
 
 _**Agent (model composer-1, mode Agent)**_
 
+Creating flashcards for Object methods: entries, fromEntries, keys, values, assign, and create, with modern web app use cases and complex scenarios.
 
 
 ---
 
 <tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2">
-<details><summary>Tool use: **run_terminal_command_v2**</summary>
+<details><summary>Tool use: **run_terminal_command_v2** • Run command: mkdir -p /Users/nickname/Documents/code-design/flashcards/objects</summary>
 
+```bash
+mkdir -p /Users/nickname/Documents/code-design/flashcards/objects
+```
 </details>
 </tool-use>
 
@@ -5045,8 +4838,6 @@ _**Agent (model composer-1, mode Agent)**_
 <tool-use data-tool-type="write" data-tool-name="edit_file_v2">
 
 <details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-entries-basics.md</summary>
-
-Status: **loading**
 
 </details>
 
@@ -5058,8 +4849,6 @@ Status: **loading**
 
 <details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-entries-usecase-1.md</summary>
 
-Status: **loading**
-
 </details>
 
 </tool-use>
@@ -5069,8 +4858,6 @@ Status: **loading**
 <tool-use data-tool-type="write" data-tool-name="edit_file_v2">
 
 <details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-entries-usecase-2.md</summary>
-
-Status: **loading**
 
 </details>
 
@@ -5082,8 +4869,6 @@ Status: **loading**
 
 <details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-entries-complex.md</summary>
 
-Status: **loading**
-
 </details>
 
 </tool-use>
@@ -5094,11 +4879,315 @@ Status: **loading**
 
 <details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-fromentries-basics.md</summary>
 
-Status: **loading**
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-fromentries-usecase-1.md</summary>
 
 </details>
 
 </tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-fromentries-usecase-2.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-fromentries-complex.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-keys-basics.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-keys-usecase-1.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-keys-usecase-2.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-keys-complex.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-values-basics.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-values-usecase-1.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-values-usecase-2.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-values-complex.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-assign-basics.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-assign-usecase-1.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-assign-usecase-2.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-assign-complex.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-create-basics.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-create-usecase-1.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-create-usecase-2.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="edit_file_v2">
+
+<details><summary>Tool use: **edit_file_v2** • Edit file: /Users/nickname/Documents/code-design/flashcards/objects/object-create-complex.md</summary>
+
+</details>
+
+</tool-use>
+
+---
+
+Verifying all flashcards were created:
+
+
+---
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2">
+<details><summary>Tool use: **run_terminal_command_v2** • Run command: ls -1 /Users/nickname/Documents/code-design/flashcards/objects/ | wc -l</summary>
+
+```bash
+ls -1 /Users/nickname/Documents/code-design/flashcards/objects/ | wc -l
+```
+
+```
+      24
+
+```
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="shell" data-tool-name="run_terminal_command_v2">
+<details><summary>Tool use: **run_terminal_command_v2** • Run command: ls -1 /Users/nickname/Documents/code-design/flashcards/objects/ | sort</summary>
+
+```bash
+ls -1 /Users/nickname/Documents/code-design/flashcards/objects/ | sort
+```
+
+```
+object-assign-basics.md
+object-assign-complex.md
+object-assign-usecase-1.md
+object-assign-usecase-2.md
+object-create-basics.md
+object-create-complex.md
+object-create-usecase-1.md
+object-create-usecase-2.md
+object-entries-basics.md
+object-entries-complex.md
+object-entries-usecase-1.md
+object-entries-usecase-2.md
+object-fromentries-basics.md
+object-fromentries-complex.md
+object-fromentries-usecase-1.md
+object-fromentries-usecase-2.md
+object-keys-basics.md
+object-keys-complex.md
+object-keys-usecase-1.md
+object-keys-usecase-2.md
+object-values-basics.md
+object-values-complex.md
+object-values-usecase-1.md
+object-values-usecase-2.md
+
+```
+</details>
+</tool-use>
+
+---
+
+Created 24 flashcards covering Object methods. Summary:
+
+## Summary
+
+### Object.entries() (4 cards)
+- **`object-entries-basics.md`** - What Object.entries() is and how it works
+- **`object-entries-usecase-1.md`** - Object transformation and filtering
+- **`object-entries-usecase-2.md`** - Form data and API response handling
+- **`object-entries-complex.md`** - Deep object diff, transformation pipeline, data aggregation
+
+### Object.fromEntries() (4 cards)
+- **`object-fromentries-basics.md`** - What Object.fromEntries() is and how it works
+- **`object-fromentries-usecase-1.md`** - Data transformation and grouping
+- **`object-fromentries-usecase-2.md`** - Filtering, mapping, nested object creation
+- **`object-fromentries-complex.md`** - Multi-stage data pipeline, form builder, state management
+
+### Object.keys() (4 cards)
+- **`object-keys-basics.md`** - What Object.keys() is and how it works
+- **`object-keys-usecase-1.md`** - Validation and property checking
+- **`object-keys-usecase-2.md`** - Dynamic property access and iteration
+- **`object-keys-complex.md`** - Form field generation, object diff, permission filtering
+
+### Object.values() (4 cards)
+- **`object-values-basics.md`** - What Object.values() is and how it works
+- **`object-values-usecase-1.md`** - Aggregation and processing
+- **`object-values-usecase-2.md`** - Nested objects and collections
+- **`object-values-complex.md`** - Multi-level data aggregation, statistical analysis, transformation pipeline
+
+### Object.assign() (4 cards)
+- **`object-assign-basics.md`** - What Object.assign() is and how it works
+- **`object-assign-usecase-1.md`** - Object merging and defaults
+- **`object-assign-usecase-2.md`** - State management and updates
+- **`object-assign-complex.md`** - Deep merge, state machine with history, multi-layer configuration
+
+### Object.create() (4 cards)
+- **`object-create-basics.md`** - What Object.create() is and how it works
+- **`object-create-usecase-1.md`** - Prototype-based inheritance
+- **`object-create-usecase-2.md`** - Property descriptors and immutability
+- **`object-create-complex.md`** - Component system with mixins, plugin system, state machine
+
+All flashcards include:
+- Explanation of what each method does
+- Modern web app use cases
+- Practical code examples
+- One complex scenario per method
+
+The complex scenario cards cover advanced patterns like deep merging, transformation pipelines, state management, component systems, and data aggregation.
+
+---
+
+_**User**_
+
+@functions/function-closure-dom-3.md:1-70 Please add some anti-pattern examples that illustrate the incorrect or mis-use of closures for this code. Similar to @functions/function-closure-dom-1.md and @functions/function-closure-dom-2.md 
 
 ---
 

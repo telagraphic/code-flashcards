@@ -16,6 +16,9 @@ const names = users.map(function(user) {
 });
 // ['Alice', 'Bob', 'Charlie']
 
+const processNames = user => user.name
+
+
 // filter: select elements (callback returns boolean)
 const activeUsers = users.filter(function(user) {
   return user.active;
