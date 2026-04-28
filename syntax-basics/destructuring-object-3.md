@@ -44,6 +44,27 @@ function extractFields(obj, ...fields) {
   return result;
 }
 
+// Use an HOF instead
+function extract(...fields) {
+  return function(object) {
+    const result = {};
+
+    fields.forEach(field => {
+      if (object[field]) !== undefined {
+        result[field] = object[field];
+      }
+    })
+
+    return result;
+  } 
+}
+
+
+
+const extractObjectFields = extract('id', 'name', 'email');
+const fieldsFromObject = extractObejctFields(user);
+
+
 const user = { id: 1, name: 'Alice', email: 'alice@example.com' };
 const { id, ...userInfo } = extractFields(user, 'id', 'name', 'email');
 ```
