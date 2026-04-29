@@ -23,7 +23,29 @@ and returns the final `acc`.
 
 ---
 
-## Array `reduce` from scratch (utility function)
+## The reducer function (you should see this first)
+
+The callback you pass to `reduce` is called a **reducer**.
+
+### Reducer “shape”
+
+```js
+(accumulator, currentValue, index, array) => nextAccumulator
+```
+
+Most of the time you only use `(acc, value)`, but the extra args are there if you need them.
+
+### A concrete reducer we’ll use in walkthroughs
+
+```js
+const sumReducer = (acc, value) => acc + value;
+```
+
+Key point: the reducer’s **return value becomes the next `acc`**.
+
+---
+
+## Implement `reduce(array, reducer, initialValue)` (utility function)
 
 This version is not “fully spec-complete”, but it includes the most important concept: **optional `initialValue`**.
 
@@ -36,10 +58,27 @@ function reduce(array, reducer, initialValue) {
   let startIndex;
 
   if (hasInitialValue) {
+    // If you pass an `initialValue`, that becomes the very first accumulator.
+    // That means the reducer still needs to run for *every* array element:
+    //
+    //   acc = initialValue
+    //   acc = reducer(acc, array[0], 0, array)
+    //   acc = reducer(acc, array[1], 1, array)
+    //   ...
+    //
+    // So we start at index 0.
     acc = initialValue;
     startIndex = 0;
   } else {
     // Minimal safety: this simplified version assumes a non-empty array
+    // If you *don't* pass an `initialValue`, `reduce` uses the first element
+    // as the starting accumulator:
+    //
+    //   acc = array[0]
+    //
+    // If we started the loop at index 0 now, we'd double-count the first value
+    // by doing `reducer(acc, array[0])` where `acc` is already `array[0]`.
+    // So we start at index 1 (the "second" element).
     acc = array[0];
     startIndex = 1;
   }
@@ -55,17 +94,9 @@ function reduce(array, reducer, initialValue) {
 }
 ```
 
-### Reducer signature
-
-```js
-(accumulator, currentValue, index, array) => newAccumulator
-```
-
-Key point: the reducer’s **return value becomes the next `acc`**.
-
 ---
 
-## Array `reduce` from scratch (prototype method)
+## Implement `array.myReduce(reducer, initialValue)` (prototype method)
 
 ```js
 Array.prototype.myReduce = function (reducer, initialValue) {
@@ -75,6 +106,9 @@ Array.prototype.myReduce = function (reducer, initialValue) {
   let startIndex;
 
   if (hasInitialValue) {
+    // Same idea as the utility version:
+    // - initialValue provided  → acc starts as initialValue, loop from 0
+    // - no initialValue        → acc starts as this[0], loop from 1
     acc = initialValue;
     startIndex = 0;
   } else {
@@ -92,80 +126,69 @@ Array.prototype.myReduce = function (reducer, initialValue) {
 
 ---
 
-## Iteration walkthrough (array with 3 values)
+## Step-by-step walkthrough: how accumulation happens
 
 We’ll use:
 
 ```js
 const nums = [1, 2, 3];
+const sumReducer = (acc, value) => acc + value;
 ```
 
-### Example A: reduce WITHOUT `initialValue`
+### Mental model (tiny flow)
+
+```mermaid
+flowchart TD
+  A[Pick starting acc + startIndex] --> B[For each element from startIndex...]
+  B --> C[acc = reducer(acc, value, index, array)]
+  C --> B
+  B --> D[Return final acc]
+```
+
+### Case A: WITHOUT `initialValue`
 
 ```js
-const sum = reduce(nums, (acc, value) => acc + value);
+const sum = reduce(nums, sumReducer);
 // expected: 6
 ```
 
-**Starting state**
+**Bootstrap**
 
 - no `initialValue` provided
-- `acc = array[0] = 1`
-- `startIndex = 1`
-- loop will visit indices: 1, 2
+- `acc = nums[0] = 1`
+- `startIndex = 1` (so we do NOT double-count index 0)
 
-**Iteration 1 (i = 1)**
+**Table of iterations**
 
-- `value = array[1] = 2`
-- call reducer: `reducer(acc, value, i, array)` → `reducer(1, 2, 1, [1,2,3])`
-- reducer returns: `1 + 2 = 3`
-- update `acc` → `3`
+| step | i | value = nums[i] | acc before | reducer call           | acc after |
+|------|---|------------------|------------|------------------------|----------|
+| 1    | 1 | 2                | 1          | sumReducer(1, 2) = 3   | 3        |
+| 2    | 2 | 3                | 3          | sumReducer(3, 3) = 6   | 6        |
 
-**Iteration 2 (i = 2)**
+Return `6`.
 
-- `value = array[2] = 3`
-- call reducer → `reducer(3, 3, 2, [1,2,3])`
-- reducer returns: `3 + 3 = 6`
-- update `acc` → `6`
-
-Loop ends → returns `acc = 6`.
-
-### Example B: reduce WITH `initialValue`
+### Case B: WITH `initialValue`
 
 ```js
-const sum = reduce(nums, (acc, value) => acc + value, 0);
+const sum = reduce(nums, sumReducer, 0);
 // expected: 6
 ```
 
-**Starting state**
+**Bootstrap**
 
 - `initialValue = 0`
 - `acc = 0`
-- `startIndex = 0`
-- loop will visit indices: 0, 1, 2
+- `startIndex = 0` (process every element)
 
-**Iteration 0 (i = 0)**
+**Table of iterations**
 
-- `value = 1`
-- reducer call → `reducer(0, 1, 0, [1,2,3])`
-- returns `1`
-- `acc = 1`
+| step | i | value = nums[i] | acc before | reducer call           | acc after |
+|------|---|------------------|------------|------------------------|----------|
+| 1    | 0 | 1                | 0          | sumReducer(0, 1) = 1   | 1        |
+| 2    | 1 | 2                | 1          | sumReducer(1, 2) = 3   | 3        |
+| 3    | 2 | 3                | 3          | sumReducer(3, 3) = 6   | 6        |
 
-**Iteration 1 (i = 1)**
-
-- `value = 2`
-- reducer call → `reducer(1, 2, 1, [1,2,3])`
-- returns `3`
-- `acc = 3`
-
-**Iteration 2 (i = 2)**
-
-- `value = 3`
-- reducer call → `reducer(3, 3, 2, [1,2,3])`
-- returns `6`
-- `acc = 6`
-
-Loop ends → returns `6`.
+Return `6`.
 
 ---
 
@@ -191,21 +214,13 @@ This is why it’s common to use:
 
 ---
 
-## How to write a reducer function (this file was missing this)
+## Common reducer mistakes
 
 A reducer function must answer one question every time it’s called:
 
 > “Given the current accumulator and the next value, what should the next accumulator be?”
 
 That means **your reducer must return the next accumulator**.
-
-### Reducer “shape” (arrays)
-
-```js
-(acc, value, index, array) => nextAcc
-```
-
-Only `acc` and `value` are usually required; the other two are optional.
 
 ### The #1 mistake: forgetting to return
 
