@@ -8,12 +8,14 @@ How do you implement `throttle` from scratch (basic → web use case → medium/
 
 ## Basic `throttle` key components (what matters)
 
-- **closure state (`inThrottle`)**: a boolean “gate” stored in the outer scope so calls share the same throttle window.
-- **returned wrapper function**: `throttle` returns `throttled(...)`; you call the wrapper many times, but it allows `fn` through only occasionally.
-- **gate check (early return)**: `if (inThrottle) return;` drops calls that arrive inside the window.
-- **run immediately (leading edge)**: in the basic version, the first call runs right away, then the window starts.
-- **start/reset the window (`setTimeout`)**: a timer flips `inThrottle` back to `false` after `waitMs`, reopening the gate.
-- **forward `this` and args (`fn.apply(this, args)`)**: preserves method calls and arguments when you throttle event handlers or object methods.
+| Piece | Where it lives | What it’s responsible for |
+| --- | --- | --- |
+| **Closure state (`inThrottle`)** | inside `throttle`, outside the returned function | A shared boolean “gate” that tracks whether you’re currently inside a throttle window. |
+| **Returned wrapper function (`throttled`)** | the function you get back from `throttle(...)` | This is what you call repeatedly; it decides whether `fn` is allowed to run right now. |
+| **Gate check (early return)** | at the start of each `throttled(...)` call | Drops calls that arrive while the gate is closed (inside the current window). |
+| **Leading-edge run** | inside `throttled(...)` right after passing the gate | In the basic version, the *first* call in a window runs immediately. |
+| **Window timer (`setTimeout`)** | after the leading run | Re-opens the gate after `waitMs` so another call can run. |
+| **Forward `this` + args (`fn.apply(this, args)`)** | when invoking `fn` | Preserves method calls and arguments, which matters for event handlers and object methods. |
 
 ---
 
@@ -70,106 +72,73 @@ Even if the browser fires dozens of scroll events per second, `reportScroll` run
 
 ---
 
-## Medium/complex `throttle` (leading + trailing + cancel/flush)
+## Step-by-step: what `throttle` does over time (basic version)
 
-This version supports:
+Think of throttling as a **gate that can open at most once per window**:
 
-- `leading`: run immediately at the start of a throttle window
-- `trailing`: run once at the end with the latest args
-- `.cancel()`: drop pending trailing call
-- `.flush()`: run pending trailing call immediately
+1. **First event arrives (gate open)** → allow `fn(...)` to run immediately.
+2. **Close the gate** for the next `waitMs`.
+3. **More events arrive while closed** → drop them (basic version).
+4. **Timer ends** → re-open the gate.
+5. **Next event after the window** becomes the next allowed call, repeating the cycle.
 
-Implementation uses `setTimeout` and keeps the “latest call” captured.
+### Timing diagram (example with `waitMs = 200`)
 
-```js
-function throttleAdvanced(fn, waitMs, options = {}) {
-  const leading = options.leading !== false; // default true
-  const trailing = !!options.trailing; // default false (explicitly opt-in)
+If events fire at \(t = 0, 50, 100, 150, 250, 260\):
 
-  let timerId = null;
-  let lastArgs = null;
-  let lastThis = null;
-  let lastResult;
-  let didCallLeadingInWindow = false;
+- \(t=0\): runs (opens a new window \([0..200)\))
+- \(t=50,100,150\): ignored (still inside window)
+- \(t=250\): runs (new window \([250..450)\))
+- \(t=260\): ignored
 
-  function invoke() {
-    const args = lastArgs;
-    const ctx = lastThis;
-    lastArgs = lastThis = null;
-    lastResult = fn.apply(ctx, args);
-    return lastResult;
-  }
-
-  function startWindow() {
-    timerId = setTimeout(() => {
-      timerId = null;
-      const hasTrailing = trailing && lastArgs != null;
-      didCallLeadingInWindow = false;
-      if (hasTrailing) invoke();
-    }, waitMs);
-  }
-
-  function throttled(...args) {
-    lastArgs = args;
-    lastThis = this;
-
-    if (timerId == null) {
-      // new window starts now
-      didCallLeadingInWindow = false;
-
-      if (leading) {
-        didCallLeadingInWindow = true;
-        invoke(); // consumes lastArgs/lastThis
-      }
-
-      startWindow();
-      return lastResult;
-    }
-
-    // inside window: either ignore, or remember for trailing
-    if (!trailing) {
-      lastArgs = lastThis = null;
-    }
-
-    return lastResult;
-  }
-
-  throttled.cancel = () => {
-    if (timerId) clearTimeout(timerId);
-    timerId = null;
-    lastArgs = lastThis = null;
-    didCallLeadingInWindow = false;
-  };
-
-  throttled.flush = () => {
-    if (!timerId || !trailing || lastArgs == null) return lastResult;
-    clearTimeout(timerId);
-    timerId = null;
-    didCallLeadingInWindow = false;
-    return invoke();
-  };
-
-  return throttled;
-}
+```mermaid
+flowchart LR
+  A["Event at t=0"] --> B["Gate open → run fn(...)"]
+  B --> C["Close gate + start timer (200ms)"]
+  D["Events during window"] --> E["Gate closed → ignore (basic)"]
+  C --> F["Timer ends → open gate"]
+  F --> G["Next event arrives"] --> B
 ```
 
-### Example: “mousemove analytics” with trailing update
+### Linear timeline: when `inThrottle` flips `false → true → false`
 
-```js
-const send = (payload) => fetch("/api/track", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(payload),
-});
+Same example (\(waitMs = 200\), events at \(t = 0, 50, 100, 150, 250, 260\)):
 
-const trackMove = throttleAdvanced((e) => {
-  send({ type: "move", x: e.clientX, y: e.clientY, t: Date.now() });
-}, 1000, { leading: true, trailing: true });
+```text
+time (ms):   0       50      100     150     200     250     260     450
+             |-------|-------|-------|-------|-------|-------|-------|
+event:       ^       ^       ^       ^               ^       ^
+             run     drop    drop    drop            run     drop
 
-document.addEventListener("mousemove", trackMove);
+inThrottle:  false → true -------------------→ false → true --------→ false
+             (set true after run)             (timer ends) (new run) (timer ends)
 ```
 
-Mental model:
+---
 
-- leading gives you “immediate response”
-- trailing gives you “latest state at the end of the window”
+## Extending the basic `throttle`: what the “advanced” API is for (no code)
+
+The basic version answers: “**run at most once every N ms** (and drop everything in-between).”
+
+More robust throttles add knobs so you can control *which* calls you keep.
+
+### Advanced API summary + when it’s useful
+
+- **`leading`**: run immediately at the start of a window (basic throttle behavior).
+  - **Useful when**: you want immediate feedback (UI meter updates, showing something is happening).
+
+- **`trailing`**: run once at the end of the window using the **latest** arguments seen during the window.
+  - **Useful when**: you don’t want to lose the “final state” (e.g., send the last mouse position, last scroll position, last resize dimensions).
+
+- **`.cancel()`**: drop any pending trailing run and clear the window.
+  - **Useful when**: the work is no longer relevant (unmount, route change, user toggled a mode off).
+
+- **`.flush()`**: run the pending trailing call immediately (if one is queued).
+  - **Useful when**: you’re about to commit/submit/navigate and want the most recent throttled state applied right now.
+
+### Why this is more robust
+
+The “advanced” complexity is about **not losing important state**:
+
+- Basic throttle can miss the latest value because it drops calls inside the window.
+- Trailing-enabled throttle gives you **periodic updates** *and* the **latest value at the end** of each window.

@@ -8,12 +8,14 @@ How do you implement `debounce` from scratch (basic → web use case → medium/
 
 ## Basic `debounce` key components (what matters)
 
-- **closure state (`timerId`)**: `timerId` lives in the outer scope so every call to the returned function shares the same timer.
-- **returned wrapper function**: `debounce` returns `debounced(...)` so you call the wrapper many times, but it schedules the original `fn` only once at the end of a burst.
-- **cancel previous work (`clearTimeout`)**: each call cancels the previous pending timer, so only the *latest* call can win.
-- **schedule the trailing run (`setTimeout`)**: start a new timer that waits `waitMs`, then calls `fn`.
-- **forward `this` and args (`fn.apply(this, args)`)**: preserves the caller’s `this` and passes through arguments; without this, methods like `obj.onChange` can break when debounced.
-- **trailing-edge behavior**: because the call happens inside `setTimeout`, the function runs **after** the last call, not immediately.
+| Piece | Where it lives | What it’s responsible for |
+| --- | --- | --- |
+| **Closure state (`timerId`)** | inside `debounce`, outside the returned function | Stores the *current* timer so every call shares the same “pending work” slot. |
+| **Returned wrapper function (`debounced`)** | the function you get back from `debounce(...)` | This is what you call repeatedly; it decides when (or if) to run the original `fn`. |
+| **Cancel previous work (`clearTimeout`)** | at the start of each `debounced(...)` call | Stops the previously scheduled run so only the latest call in a burst can win. |
+| **Schedule the trailing run (`setTimeout`)** | after canceling, within `debounced(...)` | Creates a new timer for `waitMs` that will eventually call `fn`. |
+| **Forward `this` + args (`fn.apply(this, args)`)** | inside the timer callback | Preserves the caller’s `this` and forwards arguments so debouncing methods still works. |
+| **Trailing-edge behavior** | an effect of “call inside `setTimeout`” | `fn` runs **after** the last call, not immediately on the first call. |
 
 ---
 
@@ -33,6 +35,24 @@ function debounce(fn, waitMs) {
 ```
 
 Key idea: each call cancels the previous timer and schedules a new one.
+
+### `setTimeout` / `clearTimeout` notes (what’s the “timer”?)
+
+- **`setTimeout(callback, delayMs)`**: schedules `callback` to run **later** (after at least `delayMs` milliseconds).
+  - It returns a **timer handle** (often called `timerId`): a reference to *that scheduled run*, a number ID.
+  - In debounce, `delayMs` is your debouncing delay (`waitMs`).
+
+- **`clearTimeout(timerId)`**: cancels the scheduled timeout referenced by `timerId` (if it hasn’t fired yet).
+  - This is why only the *last* call in a burst can win: each new call cancels the previous scheduled run before scheduling a new one.
+  - It’s effectively safe if `timerId` is empty/undefined (the first call has nothing to cancel).
+
+
+These two are equivalent:
+
+```js
+setTimeout(resolve, 1000, "bar");
+setTimeout(() => resolve("bar"), 1000);
+```
 
 ---
 
@@ -72,6 +92,50 @@ document.querySelector("#q").addEventListener("input", (e) => {
 });
 ```
 
+### Flow diagram: how the returned function fits in
+
+You can read `debounce(onSearch, 300)` as: “build me a new function that *controls when* `onSearch` is allowed to run”.
+
+In other words:
+
+- `onSearch` is the **work function** (what you *eventually* want to happen)
+- `debouncedOnSearch` is the **gatekeeper function** (what you call *every time* the event fires)
+- the gatekeeper holds onto shared state (the timer) so it can decide when the work is allowed to actually run
+
+```mermaid
+flowchart TD
+  A["You call debounce(onSearch, 300)"] --> B["debounce creates closure state: timerId (empty)"]
+  B --> C["debounce returns debounced(...args)"]
+
+  D["Input event fires"] --> E["handler calls debouncedOnSearch(query)"]
+  E --> F["Inside debounced(...): clearTimeout(timerId)"]
+  F --> G["timerId = setTimeout( ... , 300 )"]
+  G --> H["(300ms passes with no new calls)"]
+  H --> I["timer callback runs: onSearch.apply(this, args)"]
+
+  E --> J["If another input arrives before 300ms..."]
+  J --> F
+```
+
+### Linear timeline: how each call cancels/reschedules
+
+Example with `waitMs = 300` and quick typing events at \(t = 0, 80, 140\) for `c → ca → cat`:
+
+```text
+time (ms):   0        80       140                 440
+             |--------|--------|-------------------|
+input:       "c"      "ca"     "cat"
+
+schedule:    onSearch("c")   (cancelled)
+             └─ would run at t=300
+
+             onSearch("ca")  (cancelled)
+                      └─ would run at t=380
+
+             onSearch("cat") (kept)
+                              └─ runs at t=440 (140 + 300)
+```
+
 ### What happens when you type “cat” quickly?
 
 Calls arrive like: `c` → `ca` → `cat`
@@ -83,123 +147,32 @@ Calls arrive like: `c` → `ca` → `cat`
 
 ---
 
-## Medium/complex `debounce` (leading/trailing + maxWait + cancel/flush)
+## Extending the basic `debounce`: what the “advanced” features are for (no code)
 
-This version supports:
+The basic version answers: “**only run after the user stops**.”
 
-- `leading`: run immediately on the first call in a burst
-- `trailing`: run after the burst ends
-- `maxWait`: guarantee it runs at least every N ms even if calls keep coming
-- `.cancel()`: drop pending work
-- `.flush()`: run the pending trailing call immediately (if any)
+The more feature-rich versions exist because real UIs often need more control than *just* trailing-edge scheduling.
 
-```js
-function debounceAdvanced(fn, waitMs, options = {}) {
-  const leading = !!options.leading;
-  const trailing = options.trailing !== false; // default true
-  const maxWait = typeof options.maxWait === "number" ? options.maxWait : null;
+### Feature summary + when it’s useful
 
-  let timerId = null;
-  let maxTimerId = null;
-  let lastArgs = null;
-  let lastThis = null;
-  let lastResult;
-  let hasPendingTrailing = false;
+- **`leading` (run immediately at the start of a burst)**: gives instant feedback on the first interaction, then suppresses the spammy middle calls.
+  - **Useful when**: you want the UI to react right away, but still avoid repeated work (e.g., show a “preview loading…” state immediately, then fetch once at the end).
 
-  function invoke() {
-    const args = lastArgs;
-    const ctx = lastThis;
-    lastArgs = lastThis = null;
-    hasPendingTrailing = false;
-    lastResult = fn.apply(ctx, args);
-    return lastResult;
-  }
+- **`trailing` (run after the burst ends)**: what the basic debounce already does.
+  - **Useful when**: correctness depends on the *final* input value (search query, final window size, last keystroke).
 
-  function startWaitTimer() {
-    timerId = setTimeout(() => {
-      timerId = null;
-      if (trailing && hasPendingTrailing) invoke();
-      if (maxTimerId) {
-        clearTimeout(maxTimerId);
-        maxTimerId = null;
-      }
-    }, waitMs);
-  }
+- **`maxWait` (guarantee it runs at least every N ms even if calls keep coming)**: prevents “never runs” when the burst *doesn’t end*.
+  - **Useful when**: the user can keep producing events continuously (scroll/resize/drag), but you still must do periodic work (autosave, analytics heartbeat, incremental layout/position recalculation).
 
-  function startMaxTimer() {
-    if (maxWait == null || maxTimerId != null) return;
-    maxTimerId = setTimeout(() => {
-      maxTimerId = null;
-      if (timerId) {
-        clearTimeout(timerId);
-        timerId = null;
-      }
-      if (trailing && hasPendingTrailing) invoke();
-      // if calls continue after this, the next call will schedule timers again
-    }, maxWait);
-  }
+- **`.cancel()` (drop pending work)**: lets you explicitly say “whatever was scheduled, don’t do it.”
+  - **Useful when**: the work is no longer relevant (component unmounts, user navigates away, the input is cleared, a request is superseded by a new mode).
 
-  function debounced(...args) {
-    lastArgs = args;
-    lastThis = this;
-    hasPendingTrailing = true;
+- **`.flush()` (run the pending trailing call immediately)**: “do it now” if something is waiting.
+  - **Useful when**: the user triggers an explicit action that should force the latest pending update (press Enter to search, click “Save now”, submit a form, blur an input).
 
-    const isCold = timerId == null; // no active wait window
+### What use cases is the complexity for?
 
-    if (isCold) {
-      if (leading) {
-        hasPendingTrailing = false; // consume this call as leading
-        lastResult = fn.apply(lastThis, lastArgs);
-        lastArgs = lastThis = null;
-      }
-      startWaitTimer();
-      startMaxTimer();
-      return lastResult;
-    }
+This complexity is mostly about **UX control and lifecycle control**:
 
-    // warm: extend the wait window
-    clearTimeout(timerId);
-    startWaitTimer();
-    startMaxTimer();
-    return lastResult;
-  }
-
-  debounced.cancel = () => {
-    if (timerId) clearTimeout(timerId);
-    if (maxTimerId) clearTimeout(maxTimerId);
-    timerId = null;
-    maxTimerId = null;
-    lastArgs = lastThis = null;
-    hasPendingTrailing = false;
-  };
-
-  debounced.flush = () => {
-    if (!timerId || !trailing || !hasPendingTrailing) return lastResult;
-    clearTimeout(timerId);
-    timerId = null;
-    if (maxTimerId) {
-      clearTimeout(maxTimerId);
-      maxTimerId = null;
-    }
-    return invoke();
-  };
-
-  return debounced;
-}
-```
-
-### Example: autosave with “save now” button
-
-```js
-const saveDraft = debounceAdvanced(async () => {
-  await fetch("/api/draft", { method: "POST", body: "..." });
-}, 1000, { trailing: true, maxWait: 5000 });
-
-document.querySelector("#editor").addEventListener("input", saveDraft);
-document.querySelector("#saveNow").addEventListener("click", () => saveDraft.flush());
-```
-
-Mental model:
-
-- wait timer makes it “run after things stop”
-- maxWait makes it “run at least sometimes even if they never stop”
+- **UX control**: “first call should respond immediately” (`leading`), “final call should run” (`trailing`), “also don’t starve the work forever” (`maxWait`).
+- **Lifecycle control**: “don’t run after we left the page” (`cancel`), “run before we submit / navigate” (`flush`).
