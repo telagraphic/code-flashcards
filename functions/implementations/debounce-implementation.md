@@ -6,6 +6,15 @@ How do you implement `debounce` from scratch (basic → web use case → medium/
 - `debounce`: “run after the user stops doing the thing”
 - common uses: search-as-you-type, autosave, window resize recalcs
 
+## Basic `debounce` key components (what matters)
+
+- **closure state (`timerId`)**: `timerId` lives in the outer scope so every call to the returned function shares the same timer.
+- **returned wrapper function**: `debounce` returns `debounced(...)` so you call the wrapper many times, but it schedules the original `fn` only once at the end of a burst.
+- **cancel previous work (`clearTimeout`)**: each call cancels the previous pending timer, so only the *latest* call can win.
+- **schedule the trailing run (`setTimeout`)**: start a new timer that waits `waitMs`, then calls `fn`.
+- **forward `this` and args (`fn.apply(this, args)`)**: preserves the caller’s `this` and passes through arguments; without this, methods like `obj.onChange` can break when debounced.
+- **trailing-edge behavior**: because the call happens inside `setTimeout`, the function runs **after** the last call, not immediately.
+
 ---
 
 ## Basic `debounce` from scratch (trailing edge)

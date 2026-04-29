@@ -6,6 +6,15 @@ How do you implement `throttle` from scratch (basic → web use case → medium/
 - `throttle`: “run at most once every N ms”
 - common uses: scroll/resize handlers, mousemove tracking, “rate limit” UI events
 
+## Basic `throttle` key components (what matters)
+
+- **closure state (`inThrottle`)**: a boolean “gate” stored in the outer scope so calls share the same throttle window.
+- **returned wrapper function**: `throttle` returns `throttled(...)`; you call the wrapper many times, but it allows `fn` through only occasionally.
+- **gate check (early return)**: `if (inThrottle) return;` drops calls that arrive inside the window.
+- **run immediately (leading edge)**: in the basic version, the first call runs right away, then the window starts.
+- **start/reset the window (`setTimeout`)**: a timer flips `inThrottle` back to `false` after `waitMs`, reopening the gate.
+- **forward `this` and args (`fn.apply(this, args)`)**: preserves method calls and arguments when you throttle event handlers or object methods.
+
 ---
 
 ## Basic `throttle` from scratch (leading only)
