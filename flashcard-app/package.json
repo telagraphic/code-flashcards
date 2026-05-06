@@ -1,0 +1,21 @@
+{
+  "name": "flashcard-app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "generate-index": "node scripts/generate-flashcard-index.mjs"
+  },
+  "devDependencies": {
+    "vite": "^8.0.10"
+  },
+  "dependencies": {
+    "dompurify": "^3.4.2",
+    "hack-font": "^3.3.0",
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.1.1"
+  }
+}
