@@ -4,10 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "npm run generate-index",
     "dev": "vite",
+    "prebuild": "npm run generate-index",
     "build": "vite build",
     "preview": "vite preview",
-    "generate-index": "node scripts/generate-flashcard-index.mjs"
+    "generate-index": "node scripts/generate-flashcard-index.mjs",
+    "refresh": "npm run generate-index && npm run dev"
   },
   "devDependencies": {
     "vite": "^8.0.10"
